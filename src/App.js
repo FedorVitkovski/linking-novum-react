@@ -47,7 +47,7 @@ class App extends Component {
     .then(links => {
       let linksArr = [];
       links.map((link, index) => {
-        fetch(`/api/verses/luk?startCh=${link.startChapterNameTo}&startVerse=${link.startVerseTo}&endCh=${link.endChapterNameTo}&endVerse=${link.endVerseTo}`)
+        fetch(`/api/verses/${link.bookTo}?startCh=${link.startChapterNameTo}&startVerse=${link.startVerseTo}&endCh=${link.endChapterNameTo}&endVerse=${link.endVerseTo}`)
         .then(resp => resp.json())
         .then(verses => {
           linksArr[index] = verses;
