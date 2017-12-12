@@ -42,12 +42,12 @@ class App extends Component {
         verse: e.target.id
       }
     })
-    fetch(`http://linking-novum-api.herokuapp.com/api/links/${this.state.currVerse.book}/${this.state.currVerse.chapter}/${e.target.id}`)
+    fetch(`https://linking-novum-api.herokuapp.com/api/links/${this.state.currVerse.book}/${this.state.currVerse.chapter}/${e.target.id}`)
     .then(resp => resp.json())
     .then(links => {
       let linksArr = [];
       links.map((link, index) => {
-      fetch(`http://linking-novum-api.herokuapp.com/api/verses/${link.bookTo}?startCh=${link.startChapterNameTo}&startVerse=${link.startVerseTo}&endCh=${link.endChapterNameTo}&endVerse=${link.endVerseTo}`)
+      fetch(`https://linking-novum-api.herokuapp.com/api/verses/${link.bookTo}?startCh=${link.startChapterNameTo}&startVerse=${link.startVerseTo}&endCh=${link.endChapterNameTo}&endVerse=${link.endVerseTo}`)
       .then(resp => resp.json())
       .then(verses => {
           linksArr[index] = verses;
