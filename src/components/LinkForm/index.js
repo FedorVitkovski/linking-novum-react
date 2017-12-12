@@ -131,7 +131,7 @@ class CollectionsPage extends React.Component {
       values["startVerseFrom"] = this.props.currVerse.verse;
     
       console.log('Received values of form: ', values);
-      fetch('/api/links', {
+      fetch('http://linking-novum-api.herokuapp.com/api/links', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

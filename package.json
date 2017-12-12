@@ -18,10 +18,5 @@
     "babel-plugin-import": "^1.6.2",
     "react-app-rewire-less": "^2.1.0",
     "react-app-rewired": "^1.3.5"
-  },
-  "proxy": {
-    "/api": {
-      "target": "http://localhost:3013"
-    }
   }
 }

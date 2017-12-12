@@ -41,7 +41,11 @@ class FilterNav extends Component {
             }
             
             console.log('Received values of form: ', values);
-            fetch(`/api/verses/${values.book}/${values.chapter}`)
+            fetch(`http://linking-novum-api.herokuapp.com/api/verses/${values.book}/${values.chapter}`, {
+                method: 'GET',
+                headers: {
+                   'content-type': 'application/json'
+            }})
                 .then(resp => resp.json())
                 .then(verses => {
                     this.props.setVerses(verses, values.book, values.chapter);
