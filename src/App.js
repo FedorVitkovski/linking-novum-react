@@ -12,6 +12,7 @@ class App extends Component {
   state = {
     verses: [],
     links: [],
+    originLinks: [],
     currVerse: {
       book: '',
       chapter: 0,
@@ -29,27 +30,38 @@ class App extends Component {
     })
   }
 
-  setLinks = links => {
-    this.setState({
-      links: links
-    })
-  }
+  // setLinks = links => {
+  //   this.setState({
+  //     links: links
+  //   })
+  // }
 
   onClick = (e) => {
     this.setState({
       currVerse: {
         ...this.state.currVerse,  
         verse: e.target.id
-      }
+      },
+      links: []
     })
     fetch(`https://linking-novum-api.herokuapp.com/api/links/${this.state.currVerse.book}/${this.state.currVerse.chapter}/${e.target.id}`)
     .then(resp => resp.json())
     .then(links => {
       let linksArr = [];
+      let originLinksArr = [];
       links.map((link, index) => {
+      originLinksArr[index] = link;
+      this.setState({
+        originLinks: originLinksArr
+      })
+      console.log('CLICKED ON THE LINK!');
+      console.log(link);
+      console.log(`https://linking-novum-api.herokuapp.com/api/verses/${link.bookTo}?startCh=${link.startChapterNameTo}&startVerse=${link.startVerseTo}&endCh=${link.endChapterNameTo}&endVerse=${link.endVerseTo}`)
       fetch(`https://linking-novum-api.herokuapp.com/api/verses/${link.bookTo}?startCh=${link.startChapterNameTo}&startVerse=${link.startVerseTo}&endCh=${link.endChapterNameTo}&endVerse=${link.endVerseTo}`)
       .then(resp => resp.json())
       .then(verses => {
+          console.log('verses ---------------------- verses');
+          console.log(verses);
           linksArr[index] = verses;
           this.setState({
             links: linksArr
@@ -71,7 +83,7 @@ class App extends Component {
               <BookView verses={this.state.verses} setVerses={this.setVerses} onClick={this.onClick} />
             </Col>
             <Col span={12}>
-              <LinkView links={this.state.links} currVerse={this.state.currVerse} />
+              <LinkView links={this.state.links} originLinks={this.state.originLinks} currVerse={this.state.currVerse} />
             </Col>
           </Row>
         </Content>

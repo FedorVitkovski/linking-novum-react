@@ -22,9 +22,9 @@ class TopNav extends React.Component {
         mode="horizontal"
       >
         <Menu.Item key="mail">
-          <Icon type="mail" />Navigation One
+          <Icon type="mail" />Home
         </Menu.Item>
-        <Menu.Item key="app" disabled>
+        {/* <Menu.Item key="app" disabled>
           <Icon type="appstore" />Navigation Two
         </Menu.Item>
         <SubMenu title={<span><Icon type="setting" />Navigation Three - Submenu</span>}>
@@ -36,7 +36,7 @@ class TopNav extends React.Component {
             <Menu.Item key="setting:3">Option 3</Menu.Item>
             <Menu.Item key="setting:4">Option 4</Menu.Item>
           </MenuItemGroup>
-        </SubMenu>
+        </SubMenu> */}
         <Menu.Item key="alipay">
           <a href="https://ant.design" target="_blank" rel="noopener noreferrer">Navigation Four - Link</a>
         </Menu.Item>
