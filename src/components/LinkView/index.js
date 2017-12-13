@@ -13,7 +13,7 @@ const LinkView = (props) => (
                 console.log(index);
                 return (
                     <div key={index}>
-                        {(index === 0) ? <div><h2>Book: {verse.book} Chapter: {verse.chapter}</h2><h3>Start Verse: {props.originLinks[i].startVerseFrom} End Verse: {props.originLinks[i].endVerseFrom}</h3><h4>{props.originLinks[index].description}</h4></div> : <p></p>}
+                        {(index === 0) ? <div><h2>Book: {verse.book} Chapter: {verse.chapter}</h2><h3>Start Verse: {props.originLinks[i].startVerseFrom} End Verse: {props.originLinks[i].endVerseFrom}</h3><h4>{props.originLinks[i].description}</h4></div> : <p></p>}
                         <p><strong>{verse.verseNumber}</strong>{verse.body}</p>
                     </div>
                 )

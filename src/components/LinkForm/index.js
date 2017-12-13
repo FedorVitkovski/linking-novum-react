@@ -150,7 +150,7 @@ class CollectionsPage extends React.Component {
   render() {
     return (
       <div>
-        <Button type="primary" onClick={this.showModal}>New Collection</Button>
+        <Button type="primary" onClick={this.showModal}>Create a Link</Button>
         <CollectionCreateForm
           ref={this.saveFormRef}
           visible={this.state.visible}
