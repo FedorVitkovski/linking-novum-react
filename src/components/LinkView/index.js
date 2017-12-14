@@ -1,6 +1,10 @@
 import React from 'react';
 
+import { Card, Icon } from 'antd';
+ 
 import LinkForm from '../../components/LinkForm';
+
+const { Meta } = Card;
 
 const LinkView = (props) => (
     <div>
@@ -13,7 +17,27 @@ const LinkView = (props) => (
                 console.log(index);
                 return (
                     <div key={index}>
-                        {(index === 0) ? <div><h2>Book: {verse.book} Chapter: {verse.chapter}</h2><h3>Start Verse: {props.originLinks[i].startVerseFrom} End Verse: {props.originLinks[i].endVerseFrom}</h3><h4>{props.originLinks[i].description}</h4></div> : <p></p>}
+                        {(index === 0) ? 
+                            // <div>
+                            //     <h3>Start Verse: {props.originLinks[i].startVerseFrom} End Verse: {props.originLinks[i].endVerseFrom}</h3>
+                            //     <p>links to: </p>
+                            //     <h3>Book: {verse.book} Chapter: {verse.chapter}</h3>
+                            //     <h4>{props.originLinks[i].description}</h4>
+                            // </div>
+                            <Card
+                                style={{ width: 300, backgroundColor: '#ECECEC', paddingLeft: 0 }}
+                                actions={[<Icon type="setting" />, <Icon type="edit" />, <Icon type="ellipsis" />]}
+                            >
+                                {/* <Meta
+                                    title={`Start Verse: ${props.originLinks[i].startVerseFrom} End Verse: ${props.originLinks[i].endVerseFrom}`}
+                                    description={`Book: ${verse.book} Chapter: ${verse.chapter}`}
+                                /> */}
+                                <h3>Start Verse: {props.originLinks[i].startVerseFrom} End Verse: {props.originLinks[i].endVerseFrom}</h3>
+                                <p>links to: </p>
+                                <h3>Book: {verse.book} Chapter: {verse.chapter}</h3>
+                                <h4>{props.originLinks[i].description}</h4>  
+                            </Card>
+                            : <p></p>}
                         <p><strong>{verse.verseNumber}</strong>{verse.body}</p>
                     </div>
                 )
