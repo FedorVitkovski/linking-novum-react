@@ -30,12 +30,6 @@ class App extends Component {
     })
   }
 
-  // setLinks = links => {
-  //   this.setState({
-  //     links: links
-  //   })
-  // }
-
   onClick = (e) => {
     this.setState({
       currVerse: {
@@ -77,7 +71,7 @@ class App extends Component {
         {/* <Header>
           <TopNav />
         </Header> */}
-        <Content style={{ padding: '20px' }}>
+        <Content style={{ padding: '40px' }}>
           <Row>
             <Col span={12}>
               <BookView verses={this.state.verses} setVerses={this.setVerses} onClick={this.onClick} />
