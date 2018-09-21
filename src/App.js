@@ -74,9 +74,9 @@ class App extends Component {
   render() {
     return (
       <Layout className='layout'>
-        <Header>
+        {/* <Header>
           <TopNav />
-        </Header>
+        </Header> */}
         <Content style={{ padding: '20px' }}>
           <Row>
             <Col span={12}>
