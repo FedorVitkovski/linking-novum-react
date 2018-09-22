@@ -13,16 +13,16 @@ const { Panel } = Collapse;
 
 const LinkView = (props) => (
     <Row>
+        {props.links.length > 0 &&
         <Col span={20}>
             <div>
                 <h2>Book: {props.currVerse.book} Chapter: {props.currVerse.chapter} Verse: {props.currVerse.verse}</h2>
                 <p>Links to the following sections:</p>
             </div>
-            <Collapse defaultActiveKey={['1']}>
-    
+            <Collapse>
             {props.links.map((link, i) => {
                 console.log(link);
-                return <Panel header={`to Book ${link[0].book} Chapter: ${link[0].chapter} ${props.originLinks[i].description}`}>
+                return <Panel header={`to Book: ${link[0].book} Chapter: ${link[0].chapter} [${props.originLinks[i].description}]`}>
                 {link.map((verse, index) => {
                     console.log(index);
                     return (
@@ -34,7 +34,7 @@ const LinkView = (props) => (
                 </Panel>
             })}
             </Collapse>
-        </Col>
+        </Col>}
         <Col span={7}>
             <LinkForm currVerse={props.currVerse} />
         </Col>
