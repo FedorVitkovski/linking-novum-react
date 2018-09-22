@@ -8,9 +8,9 @@ import { Layout, Row, Col } from 'antd';
 const { Header, Footer, Sider, Content } = Layout;
 
 const blockColors = [
-  '#F44336',
-  '#FFC107',
-  '#8BC34A'
+  '255, 193, 7',
+  '244, 67, 54',
+  '139, 195, 74'
 ]
 
 class App extends Component {
