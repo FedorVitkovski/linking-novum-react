@@ -10,7 +10,8 @@
 5. Currently the BookView is touching the LinkView, add some margin/padding.
 6. When the user selects a verse a button to create a link should pop up.
 7. Change the book input to select, where the books are fully written out names.
-8. 
+8. Refactor to accomodate for expanded LinkView (contained within a modal).
+9. 
 
 
 

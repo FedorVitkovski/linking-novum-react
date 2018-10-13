@@ -9,3 +9,11 @@ export const Verse = styled.div`
     }
     background-color: ${({ currVerseNumber, id }) => currVerseNumber == id ? "palevioletred" : null} !important
 `;
+
+export const Header = styled.h2`
+    margin-top: 2rem;
+`;
+
+export const VerseView = styled.div`
+    padding: 30px;
+`;

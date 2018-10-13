@@ -107,18 +107,6 @@ const CollectionCreateForm = Form.create()(
 
 class CollectionsPage extends React.Component {
 
-  state = {
-    visible: false,
-  };
-
-  showModal = () => {
-    this.setState({ visible: true });
-  }
-
-  handleCancel = () => {
-    this.setState({ visible: false });
-  }
-
   handleCreateLink = () => {
     const form = this.form;
     form.validateFields((err, values) => {
@@ -147,13 +135,16 @@ class CollectionsPage extends React.Component {
   }
 
   render() {
+    const { modal: { hide, visible } } = this.props;
+
+    console.log('What is this??', visible);
+
     return (
       <div>
-        <Button type="primary" onClick={this.showModal} style={{ marginTop: '4px' }} icon='plus'>Create a Link</Button>
         <CollectionCreateForm
           ref={this.saveFormRef}
-          visible={this.state.visible}
-          onCancel={this.handleCancel}
+          visible={visible}
+          onCancel={hide}
           onCreate={this.handleCreateLink}
         />
       </div>

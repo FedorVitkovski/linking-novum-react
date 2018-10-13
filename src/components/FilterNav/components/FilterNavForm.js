@@ -21,7 +21,7 @@ const FilterNavForm = Form.create()(
                         <Input placeholder="Book..." />
                     )}
                 </FormItem>
-                <FormItem label="Chapter">
+                <FormItem label="Chapter" style={{ marginRight: 0 }}>
                     {getFieldDecorator('chapter', {
                         rules: [{ required: true, message: 'Please select a chapter!' }]
                     })(
