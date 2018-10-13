@@ -3,9 +3,9 @@ import React from 'react';
 
 // Internal Imports
 import { Verse, Header, VerseView } from './styled';
-import FilterNav from '../FilterNav';
+import FilterNav from '../../components/FilterNav';
 
-const BookView = ({ verses, currVerse, setVerses, handleClickOnVerse, book, chapter, showCreateLinkModal, showViewLinkModal }) => (
+const BookView = ({ verses, currVerse, setVerses, handleClickOnVerse, book, chapter, showCreateLinkModal, history }) => (
     <React.Fragment>
         <FilterNav setVerses={setVerses} />
         {chapter > 0 && <Header>Book: {book} Chapter: {chapter}</Header>}
@@ -24,7 +24,7 @@ const BookView = ({ verses, currVerse, setVerses, handleClickOnVerse, book, chap
                         <button onClick={showCreateLinkModal}>Create a Link</button>   
                     }
                     {verse.verseNumber == currVerse && 
-                        <button onClick={showViewLinkModal}>View Links</button>   
+                        <button onClick={() => history.push('/links')}>View Links</button>   
                     }
                 </div>
             )}

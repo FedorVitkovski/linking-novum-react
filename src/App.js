@@ -1,9 +1,10 @@
 // External Imports
 import React, { Component } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 // Internal Imports
-import BookView from './components/BookView';
-import LinkView from './components/LinkView';
+import BookView from './routes/BookView';
+import LinkView from './routes/LinkView';
 import LinkForm from './components/LinkForm';
 import { Container } from './styled';
 
@@ -18,13 +19,13 @@ class App extends Component {
   state = {
     verses: [],
     links: [],
-    originLinks: [],
+    linksVersesFrom: [],
+    linksVersesTo: [],
     book: '',
     chapter: 0,
     currVerse: 0,
     verseBlocks: [],
-    createLinkModalVisible: false,
-    viewLinkModalVisible: false
+    createLinkModalVisible: false
   };
 
   showCreateLinkModal = () => {
@@ -33,14 +34,6 @@ class App extends Component {
 
   hideCreateLinkModal = () => {
     this.setState({ createLinkModalVisible: false });
-  }
-
-  showViewLinkModal = () => {
-    this.setState({ viewLinkModalVisible: true });
-  }
-
-  hideViewLinkModal = () => {
-    this.setState({ viewLinkModalVisible: false });
   }
 
   setVerses = (verses, book, chapter) => {
@@ -61,66 +54,83 @@ class App extends Component {
     fetch(`${process.env.REACT_APP_API_HOST}/api/links/${this.state.book}/${this.state.chapter}/${e.target.id}`)
       .then(resp => resp.json())
       .then(links => {
-        let linksArr = [];
-        let originLinksArr = [];
+        let linksVersesFrom = [];
+        let linksVersesTo = [];
         this.setState({
-          verseBlocks: []
+          links
         });
         links.map((link, index) => {
-          originLinksArr[index] = link;
-          this.setState({
-            originLinks: originLinksArr,
-            verseBlocks: [...this.state.verseBlocks, {
-              startVerse: link.startVerseFrom,
-              endVerse: link.endVerseFrom,
-              color: blockColors[index]
-            }]
-        });
+        //   originLinksArr[index] = link;
+        //   this.setState({
+        //     originLinks: originLinksArr,
+        // });
+          console.log(link);
 
-      // fetch all the verses belonging to each link
-      fetch(`${process.env.REACT_APP_API_HOST}/api/verses/${link.bookTo}?startCh=${link.startChapterNameTo}&startVerse=${link.startVerseTo}&endCh=${link.endChapterNameTo}&endVerse=${link.endVerseTo}`)
-        .then(resp => resp.json())
-        .then(verses => {
-            linksArr[index] = verses;
-            this.setState({
-              links: linksArr
-            });
-          });
-      });
+          // fetch all the FROM verses belonging to each link
+          fetch(`${process.env.REACT_APP_API_HOST}/api/verses/${link.bookFrom}?startCh=${link.startChapterNameFrom}&startVerse=${link.startVerseFrom}&endCh=${link.endChapterNameFrom}&endVerse=${link.endVerseFrom}`)
+            .then(resp => resp.json())
+            .then(verses => {
+                linksVersesFrom[index] = verses;
+                this.setState({
+                  linksVersesFrom
+                });
+              });
+
+          // fetch all the TO verses belonging to each link
+          fetch(`${process.env.REACT_APP_API_HOST}/api/verses/${link.bookTo}?startCh=${link.startChapterNameTo}&startVerse=${link.startVerseTo}&endCh=${link.endChapterNameTo}&endVerse=${link.endVerseTo}`)
+            .then(resp => resp.json())
+            .then(verses => {
+                linksVersesTo[index] = verses;
+                this.setState({
+                  linksVersesTo
+                });
+              });
+        });
     });
   }
 
   render() {
-    const { verses, verseBlocks, currVerse, book, chapter, originLinks, createLinkModalVisible, viewLinkModalVisible, links } = this.state;
+    const { verses, verseBlocks, currVerse, book, chapter, createLinkModalVisible, linksVersesFrom, linksVersesTo, links } = this.state;
     return (
         <Container>
-          <BookView
-            verses={verses}
-            setVerses={this.setVerses}
-            handleClickOnVerse={this.handleClickOnVerse}
-            verseBlocks={verseBlocks}
-            currVerse={currVerse}
-            book={book}
-            chapter={chapter}
-            showCreateLinkModal={this.showCreateLinkModal}
-            showViewLinkModal={this.showViewLinkModal}
-          />
+          <Router>
+            <Switch>
+              <Route
+                exact
+                path="/" 
+                render={({ history }) => 
+                  <BookView
+                    history={history}
+                    verses={verses}
+                    setVerses={this.setVerses}
+                    handleClickOnVerse={this.handleClickOnVerse}
+                    verseBlocks={verseBlocks}
+                    currVerse={currVerse}
+                    book={book}
+                    chapter={chapter}
+                    showCreateLinkModal={this.showCreateLinkModal}
+                    showViewLinkModal={this.showViewLinkModal}
+                  />}
+              />
+              <Route
+                path="/links" 
+                render={({ history }) => 
+                  <LinkView
+                    history={history}
+                    currVerse={currVerse}
+                    linksVersesFrom={linksVersesFrom}
+                    linksVersesTo={linksVersesTo}
+                    links={links}
+                  />}
+              />
+            </Switch>
+          </Router>
           <LinkForm
             currVerse={currVerse}
             modal={{
               show: this.showCreateLinkModal,
               hide: this.hideCreateLinkModal,
               visible: createLinkModalVisible
-            }}
-          />
-          <LinkView
-            currVerse={currVerse}
-            links={links}
-            originLinks={originLinks}
-            modal={{
-              show: this.showViewLinkModal,
-              hide: this.hideViewLinkModal,
-              visible: viewLinkModalVisible
             }}
           />
         </Container>
