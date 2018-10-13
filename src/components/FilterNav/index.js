@@ -1,51 +1,27 @@
+// External Imports
 import React, { Component } from 'react';
-import { Form, Input, Button, Radio } from 'antd';
 
-const FormItem = Form.Item;
-
-const FilterNavForm = Form.create()(
-    (props) => {
-        const { form, handleCreate } = props;
-        const { getFieldDecorator } = form;
-        return (
-            <Form layout='inline'>
-                <FormItem
-                    label="Book"
-                >
-                {getFieldDecorator('book')(
-                    <Input placeholder="Book..." />
-                )}
-                </FormItem>
-                <FormItem
-                    label="Chapter"
-                >
-                {getFieldDecorator('chapter')(
-                    <Input placeholder="Chapter..." />
-                )}
-                </FormItem>
-                <FormItem>
-                    <Button type="primary" onClick={handleCreate}>Submit</Button>
-                </FormItem>
-            </Form>
-        )
-    }
-)
+// Internal Imports
+import FilterNavForm from './components/FilterNavForm';
 
 class FilterNav extends Component {
     
-    handleCreate = () => {
+    handleSearchChapter = (e) => {
+        e.preventDefault();
         const form = this.form;
-        form.validateFields((err, values) => {
+        form.validateFields((err, { book, chapter }) => {
             if (err) {
                 return;
             }
-            
-            console.log('Received values of form: ', values);
-            fetch(`https://linking-novum-api.herokuapp.com/api/verses/${values.book}/${values.chapter}`)
+
+            console.log(book);
+    
+            fetch(`${process.env.REACT_APP_API_HOST}/api/verses/${book}/${chapter}`)
                 .then(resp => resp.json())
                 .then(verses => {
-                    this.props.setVerses(verses, values.book, values.chapter);
-            })
+                    this.props.setVerses(verses, book, chapter);
+                });
+
             form.resetFields();
         });
     }
@@ -55,12 +31,12 @@ class FilterNav extends Component {
     }
 
     render() {
-    return (
-        <FilterNavForm
-            ref={this.saveFormRef}
-            handleCreate={this.handleCreate}
-        />
-    );
+        return (
+            <FilterNavForm
+                ref={this.saveFormRef}
+                handleSearchChapter={this.handleSearchChapter}
+            />
+        );
     }
 }
 
