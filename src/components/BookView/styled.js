@@ -7,5 +7,5 @@ export const Verse = styled.div`
         background-color: grey;
         color: white;
     }
-    background-color: ${props => props.currVerseNumber == props.id ? "palevioletred" : null} !important
+    background-color: ${({ currVerseNumber, id }) => currVerseNumber == id ? "palevioletred" : null} !important
 `;

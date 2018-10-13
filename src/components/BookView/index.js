@@ -8,14 +8,14 @@ import FilterNav from '../FilterNav';
 const BookView = (props) => (
     <div>
         <FilterNav setVerses={props.setVerses} />
-        {props.verses.map(verse => 
+        {props.verses.map(verse =>
             <Verse
                 onClick={props.handleClickOnVerse}
                 id={verse.verseNumber}
-                currVerseNumber={props.currVerse.verseNumber}
+                currVerseNumber={props.currVerse.verse}
                 className="verse"
             >
-                <strong>{verse.verseNumber}</strong>{verse.body}
+                <strong>{verse.verse}</strong>{verse.body}
             </Verse>
         )}
 

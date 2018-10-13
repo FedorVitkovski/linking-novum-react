@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Modal, Form, Input, Radio, Col, DatePicker, InputNumber, Select } from 'antd';
+import { Button, Modal, Form, Input, Col, InputNumber, Select } from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -119,7 +119,7 @@ class CollectionsPage extends React.Component {
     this.setState({ visible: false });
   }
 
-  handleCreate = () => {
+  handleCreateLink = () => {
     const form = this.form;
     form.validateFields((err, values) => {
       if (err) {
@@ -130,14 +130,13 @@ class CollectionsPage extends React.Component {
       values["startChapterNameFrom"] = this.props.currVerse.chapter;
       values["startVerseFrom"] = this.props.currVerse.verse;
     
-      console.log('Received values of form: ', values);
-      fetch('https://linking-novum-api.herokuapp.com/api/links', {
+      fetch(`${process.env.REACT_APP_API_HOST}/api/links`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify(values)
-      }).then(resp => console.log(resp))
+      });
       form.resetFields();
       this.setState({ visible: false });
     });
@@ -155,7 +154,7 @@ class CollectionsPage extends React.Component {
           ref={this.saveFormRef}
           visible={this.state.visible}
           onCancel={this.handleCancel}
-          onCreate={this.handleCreate}
+          onCreate={this.handleCreateLink}
         />
       </div>
     );

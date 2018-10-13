@@ -13,8 +13,6 @@ class FilterNav extends Component {
             if (err) {
                 return;
             }
-
-            console.log(book);
     
             fetch(`${process.env.REACT_APP_API_HOST}/api/verses/${book}/${chapter}`)
                 .then(resp => resp.json())

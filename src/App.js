@@ -23,7 +23,7 @@ class App extends Component {
     currVerse: {
       book: '',
       chapter: 0,
-      verseNumber: 0
+      verse: 0
     },
     verseBlocks: []
   };
@@ -42,7 +42,7 @@ class App extends Component {
     this.setState({
       currVerse: {
         ...this.state.currVerse,  
-        verseNumber: e.target.id
+        verse: e.target.id
       },
       links: []
     });
