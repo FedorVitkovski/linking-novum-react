@@ -25,7 +25,7 @@ const CollectionCreateForm = Form.create()(
             <FormItem label="Where does the original section end?">
                 <Col span={5}>
                     <FormItem label='Chapter'>
-                        {getFieldDecorator('endChapterNameFrom')(
+                        {getFieldDecorator('endChapterFrom')(
                             <InputNumber 
                                 min={0}
                             />
@@ -45,17 +45,17 @@ const CollectionCreateForm = Form.create()(
             <FormItem style={styles.formItem} label="Which book contains the section you want to link to?">
                 {getFieldDecorator('bookTo')(
                     <Select style={{ width: 120 }}>
-                        <Option value='luk'>Luk</Option>
-                        <Option value='mat'>Mat</Option>
-                        <Option value='mar'>Mar</Option>
-                        <Option value='act'>Act</Option>
+                        <Option value='luke'>Luke</Option>
+                        <Option value='matthew'>Matthew</Option>
+                        <Option value='mark'>Mark</Option>
+                        <Option value='acts'>Acts</Option>
                     </Select>
                 )}
             </FormItem>
             <FormItem label="Where does the link section start?">
                 <Col span={5}>
                     <FormItem label='Chapter'>
-                        {getFieldDecorator('startChapterNameTo')(
+                        {getFieldDecorator('startChapterTo')(
                             <InputNumber
                                 min={0}
                             />
@@ -75,7 +75,7 @@ const CollectionCreateForm = Form.create()(
             <FormItem style={styles.formItem} label="Where does the link section end?">
                 <Col span={5}>
                     <FormItem label='Chapter'>
-                        {getFieldDecorator('endChapterNameTo')(
+                        {getFieldDecorator('endChapterTo')(
                             <InputNumber
                                 min={0}
                             />
@@ -109,14 +109,18 @@ class CollectionsPage extends React.Component {
 
   handleCreateLink = () => {
     const form = this.form;
-    form.validateFields((err, values) => {
+    form.validateFields(async (err, values) => {
       if (err) {
         return;
       }
 
       values["bookFrom"] = this.props.currVerse.book;
-      values["startChapterNameFrom"] = this.props.currVerse.chapter;
+      values["startChapterFrom"] = this.props.currVerse.chapter;
       values["startVerseFrom"] = this.props.currVerse.verse;
+      
+      fetch(`${process.env.REACT_APP_API_HOST}/api/links`, {
+        method: 'POST'
+      });
     
       fetch(`${process.env.REACT_APP_API_HOST}/api/links`, {
           method: 'POST',

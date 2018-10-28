@@ -7,7 +7,7 @@ export const Verse = styled.div`
         background-color: grey;
         color: white;
     }
-    background-color: ${({ currVerseNumber, id }) => currVerseNumber == id ? "palevioletred" : null} !important
+    background-color: ${({ currVerseNumber, id }) => currVerseNumber == id ? "#8BC34A" : null} !important
 `;
 
 export const Header = styled.h2`
