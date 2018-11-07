@@ -114,15 +114,11 @@ class CollectionsPage extends React.Component {
         return;
       }
 
-      values["bookFrom"] = this.props.currVerse.book;
-      values["startChapterFrom"] = this.props.currVerse.chapter;
-      values["startVerseFrom"] = this.props.currVerse.verse;
-      
-      fetch(`${process.env.REACT_APP_API_HOST}/api/links`, {
-        method: 'POST'
-      });
+      values["bookFrom"] = this.props.currVerse.chapter.book.name;
+      values["startChapterFrom"] = this.props.currVerse.chapter.number;
+      values["startVerseFrom"] = this.props.currVerse.verseNumber;
     
-      fetch(`${process.env.REACT_APP_API_HOST}/api/links`, {
+      fetch(`${process.env.REACT_APP_API_HOST}/link`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -140,8 +136,6 @@ class CollectionsPage extends React.Component {
 
   render() {
     const { modal: { hide, visible } } = this.props;
-
-    console.log('What is this??', visible);
 
     return (
       <div>

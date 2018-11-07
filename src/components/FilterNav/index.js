@@ -21,7 +21,7 @@ class FilterNav extends Component {
                 const chapterData = await (await fetch(`${process.env.REACT_APP_API_HOST}/book/${bookObj._id}/chapter?number=${chapter}`)).json();
                 const chapterObj = chapterData.docs[0];
     
-                const verseData = await (await fetch(`${process.env.REACT_APP_API_HOST}/chapter/${chapterObj._id}/verse?$sort=counter`)).json();
+                const verseData = await (await fetch(`${process.env.REACT_APP_API_HOST}/chapter/${chapterObj._id}/verse?$sort=counter&$embed=chapter.book`)).json();
                 const verses = verseData.docs;
 
                 this.props.setVerses(verses, bookObj, chapterObj);

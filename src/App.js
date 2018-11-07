@@ -74,6 +74,7 @@ class App extends Component {
                     history={history}
                     currVerse={currVerse}
                     currSections={currSections}
+                    currBook={book}
                     linkedSections={linkedSections}
                   />}
               />

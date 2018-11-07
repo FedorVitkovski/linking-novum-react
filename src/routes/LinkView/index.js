@@ -11,25 +11,50 @@ class LinkView extends Component {
         linkedSectionsVerses: []
     }
 
-    async componentDidMount() {
-        currSectionsVerses = [];
-        for (let i = 0; i < this.props.currSections; i++) {
-            this.fetchSectionVerses(this.props.currSections[i]).then((verses) => {
-                this.setState(state => ({ currSectionsVerses : [...state.currSectionsVerses, state.value]}));
+    componentDidMount() {
+        for (let i = 0; i < this.props.currSections.length; i++) {
+            this.fetchSectionVerses(this.props.currSections[i]).then(({ docs }) => {
+    
+                const filteredVerses = docs
+                    .filter(verse => verse.chapter.book.name == this.props.currBook.name)
+                    .sort((a, b) => a.counter > b.counter ? 1 : -1);
+
+                console.log([...this.state.currSectionsVerses, filteredVerses]);
+
+                this.setState(state => ({ currSectionsVerses : [...state.currSectionsVerses, filteredVerses]}));
+                
+                console.log(this.state.currSectionsVerses);
             });
         }
+        
     }
 
     fetchSectionVerses = (section) => {
-        return new Promise((resolve, reject) => {
-            // your AJAX request here
-        })
+        return fetch(`${process.env.REACT_APP_API_HOST}/verse?$embed=chapter.book&$where={ "counter" : { "$gte" : ${section.startCounter}, "$lte": ${section.endCounter} } }`)
+            .then(res => res.json())
     }
 
     render() {
         return (
             <div>
                 <Link to="/">Select another verse</Link>
+                <Row style={{ width: '100%' }}>
+                    <Col span={5} style={{ width: '50%' }}>
+                        <Collapse>
+                        {this.state.currSectionsVerses.map((section) => (
+                            <Panel header={`Book: ${section[0].chapter.book.name} From: ${section[0].chapter.name} To: ${section[5].chapter.name}`}>
+                                {section.map(verse => {
+                                    return (
+                                        <div key={verse._id}>
+                                            <p><strong>{verse.chapter.number}:{verse.verseNumber}</strong>{verse.body}</p>
+                                        </div>
+                                    )
+                                })}
+                            </Panel>
+                        ))}
+                        </Collapse>
+                    </Col>
+                </Row>
             </div>
         )
     }
