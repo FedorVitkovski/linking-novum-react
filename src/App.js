@@ -33,7 +33,8 @@ class App extends Component {
     this.setState({
       verses: verses,
       book: book,
-      chapter: chapter
+      chapter: chapter,
+      currVerse: null
     })
   }
 
