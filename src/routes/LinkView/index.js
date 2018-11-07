@@ -32,6 +32,8 @@ class LinkView extends Component {
 
         const descriptions = [];
 
+        console.log(links);
+
         const linkedSectionsIds = links.map(link => {
             descriptions.push(link.description);
             if (link.section1 == currSectionId) {
@@ -45,7 +47,9 @@ class LinkView extends Component {
             descriptions
         });
 
-        const linkedSections = await (await fetch(`${process.env.REACT_APP_API_HOST}/section?_id=${linkedSectionsIds.join(',')}&$embed=book`)).json();
+        console.log(linkedSectionsIds.join('&_id='));
+
+        const linkedSections = await (await fetch(`${process.env.REACT_APP_API_HOST}/section?_id=${linkedSectionsIds.join('&_id=')}&$embed=book`)).json();
         const bookName = linkedSections.docs[0].book.name;
         this.setSectionVerses(linkedSections.docs, false, bookName);
     }
