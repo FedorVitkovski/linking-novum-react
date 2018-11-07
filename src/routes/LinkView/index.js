@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Col, Collapse } from 'antd';
+import { Row, Col, Collapse, Button } from 'antd';
 
 const { Panel } = Collapse;
 
@@ -12,26 +12,49 @@ class LinkView extends Component {
     }
 
     componentDidMount() {
-        for (let i = 0; i < this.props.currSections.length; i++) {
-            this.fetchSectionVerses(this.props.currSections[i]).then(({ docs }) => {
-    
-                const filteredVerses = docs
-                    .filter(verse => verse.chapter.book.name == this.props.currBook.name)
-                    .sort((a, b) => a.counter > b.counter ? 1 : -1);
-
-                console.log([...this.state.currSectionsVerses, filteredVerses]);
-
-                this.setState(state => ({ currSectionsVerses : [...state.currSectionsVerses, filteredVerses]}));
-                
-                console.log(this.state.currSectionsVerses);
-            });
-        }
-        
+        this.setSectionVerses(this.props.currSections);
     }
 
     fetchSectionVerses = (section) => {
         return fetch(`${process.env.REACT_APP_API_HOST}/verse?$embed=chapter.book&$where={ "counter" : { "$gte" : ${section.startCounter}, "$lte": ${section.endCounter} } }`)
             .then(res => res.json())
+    }
+
+    handleCurrSectionClick = async (e) => {
+        this.setState({
+            linkedSectionsVerses: []
+        });
+
+        const currSectionId = e.target.id;
+        const links = await (await fetch(`${process.env.REACT_APP_API_HOST}/section/${currSectionId}/link`)).json();
+        const linkedSectionsIds = links.map(link => {
+            if (link.section1 == currSectionId) {
+                return link.section2;
+            } else {
+                return link.section1;
+            }
+        });
+
+        const linkedSections = await (await fetch(`${process.env.REACT_APP_API_HOST}/section?_id=${linkedSectionsIds.join(',')}`)).json();
+
+        this.setSectionVerses(linkedSections.docs, false);
+    }
+
+    setSectionVerses = (sections, current = true) => {
+        for (let i = 0; i < sections.length; i++) {
+            this.fetchSectionVerses(sections[i]).then(({ docs }) => {
+    
+                const filteredVerses = docs
+                    .filter(verse => verse.chapter.book.name == this.props.currBook.name)
+                    .sort((a, b) => a.counter > b.counter ? 1 : -1);
+
+                if (current) {
+                    this.setState(state => ({ currSectionsVerses : [...state.currSectionsVerses, filteredVerses]}));
+                } else {
+                    this.setState(state => ({ linkedSectionsVerses : [...state.linkedSectionsVerses, filteredVerses] }));
+                }
+            });
+        }
     }
 
     render() {
@@ -41,8 +64,20 @@ class LinkView extends Component {
                 <Row style={{ width: '100%' }}>
                     <Col span={5} style={{ width: '50%' }}>
                         <Collapse>
-                        {this.state.currSectionsVerses.map((section) => (
-                            <Panel header={`Book: ${section[0].chapter.book.name} From: ${section[0].chapter.name} To: ${section[5].chapter.name}`}>
+                        {this.state.currSectionsVerses.map((section, index) => (
+                            <Panel
+                                header={`Book: ${section[0].chapter.book.name} From: ${section[0].chapter.name} To: ${section[section.length - 1].chapter.name}`}
+                                id={this.props.currSections[index]._id}
+                                onClick={this.handleCurrSectionClick}
+                            >
+                                <Button
+                                    onClick={this.handleCurrSectionClick}
+                                    id={this.props.currSections[index]._id}
+                                    style={{ marginBottom: '2px' }}
+                                >
+                                    Show sections this section links to
+                                </Button>
+        
                                 {section.map(verse => {
                                     return (
                                         <div key={verse._id}>
@@ -53,6 +88,26 @@ class LinkView extends Component {
                             </Panel>
                         ))}
                         </Collapse>
+                    </Col>
+                    <Col span={5} style={{ width: '50%' }}>
+                        <Collapse>
+                        {this.state.linkedSectionsVerses.map((section, index) => (
+                            <Panel
+                                header={`Book: ${section[0].chapter.book.name} From: ${section[0].chapter.name} To: ${section[section.length - 1].chapter.name}`}
+                                id={this.props.currSections[index]._id}
+                                onClick={this.handleCurrSectionClick}
+                            >
+                                {section.map(verse => {
+                                    return (
+                                        <div key={verse._id}>
+                                            <p><strong>{verse.chapter.number}:{verse.verseNumber}</strong>{verse.body}</p>
+                                        </div>
+                                    )
+                                })}
+                            </Panel>
+                        ))}
+                        </Collapse>
+                    
                     </Col>
                 </Row>
             </div>
