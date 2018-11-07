@@ -8,23 +8,16 @@ import LinkView from './routes/LinkView';
 import LinkForm from './components/LinkForm';
 import { Container } from './styled';
 
-const blockColors = [
-  '255, 193, 7',
-  '244, 67, 54',
-  '139, 195, 74'
-];
 
 class App extends Component {
 
   state = {
     verses: [],
-    links: [],
-    linksVersesFrom: [],
-    linksVersesTo: [],
-    book: '',
-    chapter: 0,
-    currVerse: 0,
-    verseBlocks: [],
+    book: null,
+    chapter: null,
+    currVerse: null,
+    currSections: [],
+    linkedSections: [],
     createLinkModalVisible: false
   };
 
@@ -44,53 +37,16 @@ class App extends Component {
     })
   }
 
-  handleClickOnVerse = (e) => {
+  handleClickOnVerse = async (verse) => {
+    const currSections = await (await fetch(`${process.env.REACT_APP_API_HOST}/section/${this.state.book._id}/${verse.counter}`)).json();
+    
     this.setState({
-      currVerse: e.target.id,
-      links: []
-    });
-
-    // fetch all the links belonging to the current verses book/chapter/id
-    fetch(`${process.env.REACT_APP_API_HOST}/api/links/${this.state.book}/${this.state.chapter}/${e.target.id}`)
-      .then(resp => resp.json())
-      .then(links => {
-        let linksVersesFrom = [];
-        let linksVersesTo = [];
-        this.setState({
-          links
-        });
-        links.map((link, index) => {
-        //   originLinksArr[index] = link;
-        //   this.setState({
-        //     originLinks: originLinksArr,
-        // });
-          console.log(link);
-
-          // fetch all the FROM verses belonging to each link
-          fetch(`${process.env.REACT_APP_API_HOST}/api/verses/${link.bookFrom}?startCh=${link.startChapterNameFrom}&startVerse=${link.startVerseFrom}&endCh=${link.endChapterNameFrom}&endVerse=${link.endVerseFrom}`)
-            .then(resp => resp.json())
-            .then(verses => {
-                linksVersesFrom[index] = verses;
-                this.setState({
-                  linksVersesFrom
-                });
-              });
-
-          // fetch all the TO verses belonging to each link
-          fetch(`${process.env.REACT_APP_API_HOST}/api/verses/${link.bookTo}?startCh=${link.startChapterNameTo}&startVerse=${link.startVerseTo}&endCh=${link.endChapterNameTo}&endVerse=${link.endVerseTo}`)
-            .then(resp => resp.json())
-            .then(verses => {
-                linksVersesTo[index] = verses;
-                this.setState({
-                  linksVersesTo
-                });
-              });
-        });
+      currVerse: verse,
+      currSections
     });
   }
-
   render() {
-    const { verses, verseBlocks, currVerse, book, chapter, createLinkModalVisible, linksVersesFrom, linksVersesTo, links } = this.state;
+    const { currSections, linkedSections, verses, currVerse, book, chapter, createLinkModalVisible } = this.state;
     return (
         <Container>
           <Router>
@@ -104,7 +60,6 @@ class App extends Component {
                     verses={verses}
                     setVerses={this.setVerses}
                     handleClickOnVerse={this.handleClickOnVerse}
-                    verseBlocks={verseBlocks}
                     currVerse={currVerse}
                     book={book}
                     chapter={chapter}
@@ -118,9 +73,8 @@ class App extends Component {
                   <LinkView
                     history={history}
                     currVerse={currVerse}
-                    linksVersesFrom={linksVersesFrom}
-                    linksVersesTo={linksVersesTo}
-                    links={links}
+                    currSections={currSections}
+                    linkedSections={linkedSections}
                   />}
               />
             </Switch>

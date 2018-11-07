@@ -16,15 +16,15 @@ class FilterNav extends Component {
 
             try {
                 const bookData = await (await fetch(`${process.env.REACT_APP_API_HOST}/book?name=${book.toLowerCase()}`)).json();
-                const bookId = bookData.docs[0]._id;
+                const bookObj = bookData.docs[0];
     
-                const chapterData = await (await fetch(`${process.env.REACT_APP_API_HOST}/book/${bookId}/chapter?number=${chapter}`)).json();
-                const chapterId = chapterData.docs[0]._id;
+                const chapterData = await (await fetch(`${process.env.REACT_APP_API_HOST}/book/${bookObj._id}/chapter?number=${chapter}`)).json();
+                const chapterObj = chapterData.docs[0];
     
-                const verseData = await (await fetch(`${process.env.REACT_APP_API_HOST}/chapter/${chapterId}/verse?$sort=counter`)).json();
+                const verseData = await (await fetch(`${process.env.REACT_APP_API_HOST}/chapter/${chapterObj._id}/verse?$sort=counter`)).json();
                 const verses = verseData.docs;
 
-                this.props.setVerses(verses, book, chapter);
+                this.props.setVerses(verses, bookObj, chapterObj);
             } catch (e) {
                 console.log(e);
             }

@@ -1,5 +1,6 @@
 // External Imports
 import React from 'react';
+import { Button } from 'antd';
 
 // Internal Imports
 import { Verse, Header, VerseView } from './styled';
@@ -13,18 +14,19 @@ const BookView = ({ verses, currVerse, setVerses, handleClickOnVerse, book, chap
             {verses.map(verse =>
                 <div>
                     <Verse
-                        onClick={handleClickOnVerse}
+                        onClick={() => handleClickOnVerse(verse)}
+                        value={verse}
                         id={verse.verseNumber}
-                        currVerseNumber={currVerse}
+                        currVerseNumber={currVerse != null ? currVerse.verseNumber : 0}
                         className="verse"
                     >
                         <strong>{verse.verseNumber}</strong>{verse.body}
                     </Verse>
-                    {verse.verseNumber == currVerse && 
-                        <button onClick={showCreateLinkModal}>Create a Link</button>   
+                    {currVerse != null && verse.verseNumber == currVerse.verseNumber && 
+                        <Button style={{ marginTop: '3px' }} onClick={showCreateLinkModal} shape='circle' icon='plus'></Button>   
                     }
-                    {verse.verseNumber == currVerse && 
-                        <button onClick={() => history.push('/links')}>View Links</button>   
+                    {currVerse != null && verse.verseNumber == currVerse.verseNumber && 
+                        <Button onClick={() => history.push('/links')} shape='circle' icon='eye'></Button>   
                     }
                 </div>
             )}
